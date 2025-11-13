@@ -155,16 +155,16 @@ fn generateTypeExports(
                 const decl_value = @field(T, decl.name);
                 const decl_type_info = @typeInfo(@TypeOf(decl_value));
                 if (decl_type_info == .@"fn") {
-            try generateMethodExport(
-                writer,
-                export_name,
-                T,
-                decl.name,
-                decl_value,
-                allocator,
-                export_names,
-                exports_decl,
-            );
+                    try generateMethodExport(
+                        writer,
+                        export_name,
+                        T,
+                        decl.name,
+                        decl_value,
+                        allocator,
+                        export_names,
+                        exports_decl,
+                    );
                 }
             }
         },

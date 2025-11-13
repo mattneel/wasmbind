@@ -1,0 +1,37 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+env:
+  ZIG_VERSION: 'master'
+
+jobs:
+  test-bleeding-edge:
+    name: Zig master / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - name: Install Zig master
+        run: mise install zig@master
+      - name: Run tests with Zig master
+        run: mise exec zig@master -- zig build test --summary all
+      - name: Report failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Nightly build failed (${context.runNumber})`,
+              body: `Nightly build failed on ${context.runNumber}.\n\nRun: ${context.runId}`,
+              labels: ['nightly', 'zig-master']
+            })

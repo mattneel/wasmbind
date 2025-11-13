@@ -1,0 +1,28 @@
+[tools]
+zig = "0.15.2"
+mdbook = "0.4.40"
+act = "latest"
+node = "20.11.0"
+"npm:typescript" = "5.4.5"
+
+[tasks.docs]
+description = "Build mdBook documentation"
+run = """
+mdbook build docs
+rm -rf zig-out/docs
+mkdir -p zig-out/docs
+cp -r docs/book/. zig-out/docs/
+"""
+[tasks.ts-install-chart-demo]
+description = "Install JS deps for chart demo"
+dir = "examples/chart-demo/www"
+run = "npm ci"
+[tasks.ts-check-chart-demo]
+description = "Type-check chart demo TypeScript"
+dir = "examples/chart-demo/www"
+run = "tsc --noEmit --project tsconfig.json"
+
+[tasks.ts-build-chart-demo]
+description = "Build chart demo TypeScript"
+dir = "examples/chart-demo/www"
+run = "tsc --project tsconfig.json"

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>wasmbind · Chart Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #0f0f0f;
+            color: #f5f5f5;
+        }
+        body {
+            margin: 0;
+            padding: 2rem;
+        }
+        h1 {
+            margin-top: 0;
+        }
+        #controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        button {
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 0.4rem;
+            background: #ff784f;
+            color: #0f0f0f;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        pre {
+            background: #1c1c1c;
+            padding: 1rem;
+            border-radius: 0.4rem;
+            min-height: 6rem;
+            overflow: auto;
+        }
+        canvas {
+            border: 1px solid #222;
+            display: block;
+            margin-top: 1rem;
+        }
+        .note {
+            font-size: 0.85rem;
+            color: #b5b5b5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chart Demo · wasmbind</h1>
+    <p>Zero-boilerplate Zig ↔ WASM ↔ TypeScript bindings.</p>
+
+    <div class="note">
+        Run <code>npx tsc --project tsconfig.json</code> after generating bindings to build <code>app.js</code>.
+    </div>
+
+    <div id="controls">
+        <button id="init">Initialize</button>
+        <button id="addCandle">Add Candle</button>
+        <button id="addMany">Push Sample Series</button>
+        <button id="render">Render</button>
+        <button id="destroy">Destroy</button>
+    </div>
+
+    <strong>Console Output</strong>
+    <pre id="output"></pre>
+
+    <canvas id="chart" width="800" height="480"></canvas>
+
+    <script type="module" src="./app.js"></script>
+</body>
+</html>

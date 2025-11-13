@@ -26,7 +26,7 @@ pub fn generate(
         .root_source_file = wasm_contract,
     });
 
-    const output_dir = b.pathJoin(&.{ options.output_dir });
+    const output_dir = b.pathJoin(&.{options.output_dir});
     const exports_path = b.pathJoin(&.{ output_dir, "exports.zig" });
     const ts_path = b.pathJoin(&.{ output_dir, "bindings.ts" });
 

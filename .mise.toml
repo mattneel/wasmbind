@@ -1,0 +1,8 @@
+[tools]
+zig = "0.15.2"
+mdbook = "0.4.40"
+act = "latest"
+
+[tasks.docs]
+description = "Build mdBook documentation"
+run = "mdbook build docs"

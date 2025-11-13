@@ -1,0 +1,83 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      version: ${{ steps.meta.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Extract version
+        id: meta
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: wasmbind ${{ steps.meta.outputs.version }}
+          draft: false
+          prerelease: false
+          body: |
+            ## Installation
+            ```zig
+            .dependencies = .{
+                .wasmbind = .{
+                    .url = "https://github.com/mattneel/wasmbind/archive/${{ github.ref_name }}.tar.gz",
+                    .hash = "TODO",
+                },
+            };
+            ```
+
+  build-artifacts:
+    name: Build Artifacts / ${{ matrix.os }}
+    needs: create-release
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - name: Build chart demo
+        run: |
+          cd examples/chart-demo
+          zig build -Doptimize=ReleaseSmall
+      - name: Package
+        run: |
+          tar czf wasmbind-${{ matrix.os }}.tar.gz -C examples/chart-demo zig-out www/generated
+      - name: Upload asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: wasmbind-${{ matrix.os }}.tar.gz
+          asset_name: wasmbind-${{ needs.create-release.outputs.version }}-${{ matrix.os }}.tar.gz
+          asset_content_type: application/gzip
+
+  publish-docs:
+    name: Publish Docs
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - name: Build docs
+        run: mise run docs
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: zig-out/docs
+          keep_files: false

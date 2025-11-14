@@ -13,7 +13,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: jdx/mise-action@v2
       - name: Check formatting
         run: zig fmt --check .
@@ -38,7 +38,7 @@ jobs:
           - os: macos-latest
             optimize: ReleaseFast
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: jdx/mise-action@v2
       - name: Run tests
         run: zig build test -Doptimize=${{ matrix.optimize }} --summary all
@@ -51,7 +51,7 @@ jobs:
       matrix:
         example: [chart-demo]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: jdx/mise-action@v2
       - name: Build example (Zig)
         working-directory: examples/${{ matrix.example }}
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: jdx/mise-action@v2
       - name: Install WABT
         run: |
@@ -114,7 +114,7 @@ jobs:
     name: Code Coverage
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: jdx/mise-action@v2
       - name: Run tests with coverage
         run: zig build test -Dtest-coverage || true
@@ -126,7 +126,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: jdx/mise-action@v2
       - name: Run benchmarks
         run: zig build bench || echo "Benchmarks not configured"

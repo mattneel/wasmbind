@@ -1,6 +1,7 @@
 .zig-cache/
 zig-cache/
 zig-out/
+examples/chart-demo/www/bun.lockb
 SPEC.md
 ZIG.md
 docs/book/

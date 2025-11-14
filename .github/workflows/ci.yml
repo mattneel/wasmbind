@@ -66,7 +66,7 @@ jobs:
       - name: Build TypeScript
         run: mise run ts-build-chart-demo
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.example }}-artifacts
           path: |

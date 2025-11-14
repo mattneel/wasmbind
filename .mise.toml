@@ -3,7 +3,7 @@ zig = "0.15.2"
 mdbook = "0.4.40"
 act = "latest"
 node = "20.11.0"
-"npm:typescript" = "5.4.5"
+"npm:typescript" = "5.9.3"
 
 [tasks.docs]
 description = "Build mdBook documentation"

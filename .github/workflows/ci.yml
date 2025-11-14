@@ -60,13 +60,11 @@ jobs:
         working-directory: examples/${{ matrix.example }}
         run: zig build test
       - name: Install TypeScript deps
-        run: mise run js-install-chart-demo
+        run: mise run ts-install-chart-demo
       - name: Type-check TypeScript
-        working-directory: examples/${{ matrix.example }}/www
-        run: bun run check
+        run: mise run ts-check-chart-demo
       - name: Build TypeScript
-        working-directory: examples/${{ matrix.example }}/www
-        run: bun run build
+        run: mise run ts-build-chart-demo
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:

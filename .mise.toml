@@ -1,8 +1,9 @@
 [tools]
 zig = "0.15.2"
 mdbook = "0.4.40"
-bun = "1.1.24"
 act = "latest"
+node = "20.11.0"
+"npm:typescript" = "5.9.3"
 
 [tasks.docs]
 description = "Build mdBook documentation"
@@ -12,10 +13,16 @@ rm -rf zig-out/docs
 mkdir -p zig-out/docs
 cp -r docs/book/. zig-out/docs/
 """
-[tasks.js-install-chart-demo]
-description = "Install JS deps for chart demo via Bun"
+[tasks.ts-install-chart-demo]
+description = "Install JS deps for chart demo"
 dir = "examples/chart-demo/www"
-run = """
-bun install --no-save
-rm -f bun.lockb
-"""
+run = "npm ci"
+[tasks.ts-check-chart-demo]
+description = "Type-check chart demo TypeScript"
+dir = "examples/chart-demo/www"
+run = "tsc --noEmit --project tsconfig.json"
+
+[tasks.ts-build-chart-demo]
+description = "Build chart demo TypeScript"
+dir = "examples/chart-demo/www"
+run = "tsc --project tsconfig.json"
